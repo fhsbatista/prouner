@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Prouner</string>
+    <string name="play_test">Play test</string>
+    <string name="play_again">Play again</string>
 </resources>
