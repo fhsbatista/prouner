@@ -23,6 +23,8 @@ public interface MainMVP {
 
     interface Model {
 
+        Object[] getQuestionAttributes();
+
     }
 
 }
