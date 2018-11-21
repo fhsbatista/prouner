@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.prouner.prouner.R;
+import com.prouner.prouner.model.Question;
 
 public class MainActivity extends AppCompatActivity implements MainMVP.View{
 
@@ -32,23 +33,6 @@ public class MainActivity extends AppCompatActivity implements MainMVP.View{
 
 
     }
-
-    private void loadUI() {
-
-        mPlayButton = findViewById(R.id.bt_play);
-        mOptionButton1 = findViewById(R.id.bt_option_1);
-        mOptionButton2 = findViewById(R.id.bt_option_2);
-        mOptionButton3 = findViewById(R.id.bt_option_3);
-        mOptionButton4 = findViewById(R.id.bt_option_4);
-
-        mPlayButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPresenter.viewOnPlayButtonClicked();
-            }
-        });
-    }
-
 
     @Override
     public Context getContext() {
@@ -81,12 +65,12 @@ public class MainActivity extends AppCompatActivity implements MainMVP.View{
     }
 
     @Override
-    public void showAlternatives(String... options) {
-
-        mOptionButton1.setText(options[0]);
-        mOptionButton2.setText(options[1]);
-        mOptionButton3.setText(options[2]);
-        mOptionButton4.setText(options[3]);
+    public void showAlternatives(Question question) {
+        String[] questionOptions = question.getOptions();
+        mOptionButton1.setText(questionOptions[0]);
+        mOptionButton2.setText(questionOptions[1]);
+        mOptionButton3.setText(questionOptions[2]);
+        mOptionButton4.setText(questionOptions[3]);
 
         mOptionButton1.setVisibility(View.VISIBLE);
         mOptionButton2.setVisibility(View.VISIBLE);
@@ -106,7 +90,26 @@ public class MainActivity extends AppCompatActivity implements MainMVP.View{
 
     }
 
+    @Override
+    public void showCorrectOptionMessage() {
+        Toast.makeText(this, "CorrectAnswer", Toast.LENGTH_SHORT).show();
+    }
 
+    private void loadUI() {
+
+        mPlayButton = findViewById(R.id.bt_play);
+        mOptionButton1 = findViewById(R.id.bt_option_1);
+        mOptionButton2 = findViewById(R.id.bt_option_2);
+        mOptionButton3 = findViewById(R.id.bt_option_3);
+        mOptionButton4 = findViewById(R.id.bt_option_4);
+
+        mPlayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.viewOnPlayButtonClicked();
+            }
+        });
+    }
 
     public void togglePlayButton() {
         if(mPlayButton.isEnabled()){
@@ -116,8 +119,5 @@ public class MainActivity extends AppCompatActivity implements MainMVP.View{
         }
     }
 
-    @Override
-    public void showCorrectOptionMessage() {
-        Toast.makeText(this, "CorrectAnswer", Toast.LENGTH_SHORT).show();
-    }
+
 }
