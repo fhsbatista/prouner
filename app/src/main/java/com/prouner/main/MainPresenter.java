@@ -8,44 +8,40 @@ import java.util.List;
 
 public class MainPresenter implements MainMVP.Presenter {
 
-    public static final String TAG = MainPresenter.class.getSimpleName();
-
     private MainMVP.View mView;
     private MainMVP.Model mModel;
 
+    //Constants
+    private static final String TAG = MainPresenter.class.getSimpleName();
+
+    /**
+     * <p>This boolean variable is used to make the presenter able to know
+     * if the user is currently in a test.</p>
+     * <p>It is necessary when the user hits the <b>Play Button</b>,so that the presenter will know if it is necessary to make the view show the options.</p>
+     * <p>When the <b>Play Button</b> is hitted, the question's sound will always be played, and the presenter can also request the view to display the answer's options or not. That depends on if the user has hitted the "Play Button" by the first time or not, if it is the first time, the answer's options has to be displayed, otherwise nothing further must happen.</p>
+     */
     private boolean isTestRunning = false;
-    private int midSound;
+
+    /**
+     * <p>Field which will store a list of questions.</p>
+     * <p>The presenter will always send to the view the question that's in
+     * the index 0 in this list. And each time the user get a correct answer,
+     * the current question in the position 0 will be removed, so that the user
+     * can get a new question.</p>
+     */
     private List<Question> mQuestionList;
 
-    public MainPresenter() {
+    MainPresenter() {
         mModel = new MainModel();
     }
 
     @Override
     public void setView(MainMVP.View view) {
         mView = view;
-        mView.newTest();
+        mView.updateUIForNewTest();
         isTestRunning = false;
 
         requestQuestionList();
-    }
-
-    private void requestQuestionList() {
-        mView.showLoadingContent();
-        mModel.setOnQuestionRequestListener(new MainModel.OnQuestionRequestListener() {
-            @Override
-            public void onSuccess(List<Question> questionsList) {
-                mQuestionList = questionsList;
-                mView.hideLoadingContent();
-            }
-
-            @Override
-            public void onError() {
-                Log.d(TAG, "Error when downloading questions");
-                mView.showErrorWhenDownloadingQuestionsMessage();
-            }
-        });
-        mModel.getQuestionAttributesArray();
     }
 
     @Override
@@ -54,7 +50,7 @@ public class MainPresenter implements MainMVP.Presenter {
     }
 
     @Override
-    public void viewOnSoundPlayingCompleted() {
+    public void viewSoundQuestionPlayed() {
 
         //Verifies if the user has just started a new test, if so, the presenter must get the options and send to the view show them, if not, nothing has to be done
         if (!isTestRunning) {
@@ -75,34 +71,46 @@ public class MainPresenter implements MainMVP.Presenter {
         }
     }
 
+    /**
+     * <p>Notifies the view that the data is being loaded,
+     * so that the view can perform actions on the UI to let
+     * the user know that the data is being loaded.</p>
+     * <p>Also requests the model to download the questions, and implements a callback and attaches it in the Model in order to be notified when the data get downloaded.
+     */
+    private void requestQuestionList() {
+        mView.showLoadingContent();
+        mModel.setOnQuestionRequestListener(new MainModel.OnQuestionRequestListener() {
+            @Override
+            public void onSuccess(List<Question> questionsList) {
+                mQuestionList = questionsList;
+                mView.hideLoadingContent();
+            }
+
+            @Override
+            public void onError() {
+                Log.d(TAG, "Error when downloading questions");
+                mView.showErrorWhenDownloadingQuestionsMessage();
+            }
+        });
+        mModel.getQuestionAttributesArray();
+    }
+
+    /**
+     * <p>Notifies the view that a new test will be provided,
+     * so that the view can update its UI changing text's buttons and removing the answer's options.</p>
+     */
     private void startNewTest() {
-        mView.newTest();
+        mView.updateUIForNewTest();
         isTestRunning = false;
     }
 
-//    private String[] getOptions(){
-//
-//        //Defines which option number will contain the correct answer
-//        Random random = new Random();
-//        int indexCorrectOption = random.nextInt(4);
-//
-//
-//        //Manipulate the String array in order to make the correct answer stay in the correct array position
-//        String aux = mOptionsText[indexCorrectOption]; // Save the string which is currently in the correct position
-//        mOptionsText[indexCorrectOption] = mOptionsText[0]; // Put in the correct position, the correct answer (text), the correct answer is always in the position 0
-//        mOptionsText[0] = aux; // Put in the position 0 the answer that previously was in the correct position
-//
-//        //Initialize the member variable with the text of the correct answer, this will be used later to verify whether the user has answered correctly
-//        mCorrectOptionText = mOptionsText[indexCorrectOption];
-//
-//        return mOptionsText;
-//    }
-
+    /**
+     * Checks if the user's answer is correct. Necessary to define if a new test has to be started.
+     * @param userAnswer String of the user's answer.
+     * @return <p><b>True</b> if the user's answer is the correct.</p>
+     *         <p><b>False</b> otherwise</p>.
+     */
     private boolean isOptionClickedCorrect(String userAnswer) {
-        if (mQuestionList.get(0).isAnswerCorrect(userAnswer)) {
-            return true;
-        } else {
-            return false;
-        }
+        return mQuestionList.get(0).isAnswerCorrect(userAnswer);
     }
 }

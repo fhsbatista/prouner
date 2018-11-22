@@ -5,6 +5,7 @@ import android.media.MediaPlayer;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -14,6 +15,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.prouner.R;
 import com.prouner.model.Question;
+import com.prouner.util.Util;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,6 +28,8 @@ public class MainActivity extends AppCompatActivity implements MainMVP.View {
 
     //Constants
     public static final String TAG = MainActivity.class.getSimpleName();
+    public static final int PLAYING_SOUND_DELAY = 3000;
+
 
     //UI Elements
     private ProgressBar mLoadingProgressBar;
@@ -46,8 +50,6 @@ public class MainActivity extends AppCompatActivity implements MainMVP.View {
         //Initalize the presenter
         mPresenter = new MainPresenter();
         mPresenter.setView(this);
-
-
     }
 
     @Override
@@ -57,47 +59,54 @@ public class MainActivity extends AppCompatActivity implements MainMVP.View {
 
     @Override
     public void playSound(byte[] audio) {
+        //Makes the "play button" unable so that the user has to wait for the sound gets finished to hit the button again
         togglePlayButton();
+        //Executes the sound received
         MediaPlayer mp = new MediaPlayer();
         try {
-            mp.setDataSource(getFileFromByteArray(audio).getFD());
+            mp.setDataSource(Util.getFileFromByteArray(audio, this).getFD());
             mp.prepare();
+            mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mediaPlayer) {
+                    mediaPlayer.start();
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mPresenter.viewSoundQuestionPlayed();
+                        }
+                    }, PLAYING_SOUND_DELAY);
+                }
+            });
+            mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    //Makes the "Play button" able to be hitted again, and sets a new text for it like "Replay"
+                    mp.release();
+                    togglePlayButton();
+                    mPlayButton.setText(R.string.play_again);
+                }
+            });
+
+            mp.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+                @Override
+                public boolean onError(MediaPlayer mp, int what, int extra) {
+                    Log.d(TAG , "Media Player : onErrorListener - " + "Error when playing the sound");
+                    return false;
+                }
+            });
         } catch (IOException e) {
             e.printStackTrace();
+            Log.d(TAG, "Error when playing the sound");
         }
-        mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mediaPlayer) {
-                mediaPlayer.start();
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mPresenter.viewOnSoundPlayingCompleted();
-                    }
-                }, 3000);
-            }
-        });
 
-        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                mp.release();
-                togglePlayButton();
-                mPlayButton.setText(R.string.play_again);
-            }
-        });
 
-        mp.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-            @Override
-            public boolean onError(MediaPlayer mp, int what, int extra) {
-                return false;
-            }
-        });
+
     }
 
     @Override
-    public void newTest() {
+    public void updateUIForNewTest() {
         mPlayButton.setText(R.string.play_test);
         mOptionButton1.setVisibility(View.GONE);
         mOptionButton2.setVisibility(View.GONE);
@@ -139,6 +148,24 @@ public class MainActivity extends AppCompatActivity implements MainMVP.View {
         Toast.makeText(this, "CorrectAnswer", Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void hideLoadingContent() {
+        mLoadingProgressBar.setVisibility(View.GONE);
+        mPlayButton.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showLoadingContent() {
+        mLoadingProgressBar.setVisibility(View.VISIBLE);
+        mPlayButton.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showErrorWhenDownloadingQuestionsMessage() {
+        Toast.makeText(this, "Problems when downloading the questions", Toast.LENGTH_SHORT).show();
+    }
+
+    //Bind the UI elements
     private void bindUI() {
 
 
@@ -159,51 +186,13 @@ public class MainActivity extends AppCompatActivity implements MainMVP.View {
         });
     }
 
+    //Enables the play button if it is unable and unables it if it is unable
     private void togglePlayButton() {
         if (mPlayButton.isEnabled()) {
             mPlayButton.setEnabled(false);
         } else {
             mPlayButton.setEnabled(true);
         }
-    }
-
-    private FileInputStream getFileFromByteArray(byte[] bytes) {
-
-        try {
-            File temp = File.createTempFile("audio", "mp3", getCacheDir());
-            temp.deleteOnExit();
-            FileOutputStream fos = new FileOutputStream(temp);
-            fos.write(bytes);
-            fos.close();
-
-            FileInputStream fis = new FileInputStream(temp);
-
-            return fis;
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-
-
-    }
-
-    @Override
-    public void hideLoadingContent() {
-        mLoadingProgressBar.setVisibility(View.GONE);
-        mPlayButton.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void showLoadingContent() {
-        mLoadingProgressBar.setVisibility(View.VISIBLE);
-        mPlayButton.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void showErrorWhenDownloadingQuestionsMessage() {
-        Toast.makeText(this, "Problems when downloading the questions", Toast.LENGTH_SHORT).show();
     }
 
 }

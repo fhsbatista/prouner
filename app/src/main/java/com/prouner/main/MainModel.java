@@ -19,6 +19,9 @@ import java.util.List;
 
 public class MainModel implements MainMVP.Model {
 
+    /**
+     * Callback that can be used to notify that the question's download has been completed
+     */
     private OnQuestionRequestListener onQuestionRequestListener;
 
     @Override
@@ -69,13 +72,26 @@ public class MainModel implements MainMVP.Model {
         });
     }
 
+    /**
+     * Setter for the field <b>onQuestionRequestListener</b>, which is a listener required by the MainModel
+     * in order to notifies the question's download's results.
+     * @param onQuestionRequestListener A listener that has to implement onSuccess and onError methods.
+     */
     public void setOnQuestionRequestListener(OnQuestionRequestListener onQuestionRequestListener) {
         this.onQuestionRequestListener = onQuestionRequestListener;
     }
 
     public interface OnQuestionRequestListener {
+
+        /**
+         * Notifies that the question's download has been completed successfully.
+         * @param questionsList List of questions which has been downloaded.
+         */
         void onSuccess(List<Question> questionsList);
 
+        /**
+         * Notifies that the question's download <b>hasn't</b> been completed successfully.
+         */
         void onError();
     }
 }
