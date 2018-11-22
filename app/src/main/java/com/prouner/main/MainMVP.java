@@ -11,6 +11,7 @@ public interface MainMVP {
         void showAlternatives(Question question);
         Context getContext();
         void showCorrectOptionMessage();
+        void showErrorWhenDownloadingQuestionsMessage();
         void newTest();
         void showLoadingContent();
         void hideLoadingContent();

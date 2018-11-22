@@ -42,6 +42,7 @@ public class MainPresenter implements MainMVP.Presenter {
             @Override
             public void onError() {
                 Log.d(TAG, "Error when downloading questions");
+                mView.showErrorWhenDownloadingQuestionsMessage();
             }
         });
         mModel.getQuestionAttributesArray();

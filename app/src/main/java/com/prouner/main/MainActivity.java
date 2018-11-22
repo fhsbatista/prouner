@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.prouner.R;
 import com.prouner.model.Question;
 
@@ -25,6 +24,10 @@ public class MainActivity extends AppCompatActivity implements MainMVP.View {
 
     private MainMVP.Presenter mPresenter;
 
+    //Constants
+    public static final String TAG = MainActivity.class.getSimpleName();
+
+    //UI Elements
     private ProgressBar mLoadingProgressBar;
     private Button mPlayButton;
     private Button mOptionButton1;
@@ -37,8 +40,10 @@ public class MainActivity extends AppCompatActivity implements MainMVP.View {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        loadUI();
+        //Bind UI elements
+        bindUI();
 
+        //Initalize the presenter
         mPresenter = new MainPresenter();
         mPresenter.setView(this);
 
@@ -60,7 +65,6 @@ public class MainActivity extends AppCompatActivity implements MainMVP.View {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
@@ -135,7 +139,8 @@ public class MainActivity extends AppCompatActivity implements MainMVP.View {
         Toast.makeText(this, "CorrectAnswer", Toast.LENGTH_SHORT).show();
     }
 
-    private void loadUI() {
+    private void bindUI() {
+
 
         mLoadingProgressBar = findViewById(R.id.pb_loading);
         mPlayButton = findViewById(R.id.bt_play);
@@ -143,6 +148,8 @@ public class MainActivity extends AppCompatActivity implements MainMVP.View {
         mOptionButton2 = findViewById(R.id.bt_option_2);
         mOptionButton3 = findViewById(R.id.bt_option_3);
         mOptionButton4 = findViewById(R.id.bt_option_4);
+
+
 
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -192,6 +199,11 @@ public class MainActivity extends AppCompatActivity implements MainMVP.View {
     public void showLoadingContent() {
         mLoadingProgressBar.setVisibility(View.VISIBLE);
         mPlayButton.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showErrorWhenDownloadingQuestionsMessage() {
+        Toast.makeText(this, "Problems when downloading the questions", Toast.LENGTH_SHORT).show();
     }
 
 }

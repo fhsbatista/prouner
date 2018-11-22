@@ -14,22 +14,22 @@ import com.google.firebase.storage.StorageReference;
 import com.prouner.model.Question;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MainModel implements MainMVP.Model {
 
     private OnQuestionRequestListener onQuestionRequestListener;
 
-
+    @Override
     public void getQuestionAttributesArray() {
-
         final List<Question> questionList = new ArrayList<>();
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         ref = ref.child("questions").child("sentences");
-        Query query = ref.limitToFirst(10);
 
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
@@ -48,6 +48,7 @@ public class MainModel implements MainMVP.Model {
                         public void onSuccess(byte[] bytes) {
                             Question question = new Question(bytes, options);
                             questionList.add(question);
+                            Collections.shuffle(questionList);
                             if (onQuestionRequestListener != null) {
                                 onQuestionRequestListener.onSuccess(questionList);
                             }
@@ -66,7 +67,6 @@ public class MainModel implements MainMVP.Model {
                 }
             }
         });
-
     }
 
     public void setOnQuestionRequestListener(OnQuestionRequestListener onQuestionRequestListener) {
