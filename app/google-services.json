@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "827446492231",
+    "firebase_url": "https://prouner-47751.firebaseio.com",
+    "project_id": "prouner-47751",
+    "storage_bucket": "prouner-47751.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:827446492231:android:934fe373603d414c",
+        "android_client_info": {
+          "package_name": "com.prouner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "827446492231-lktscj9vr5tr7tfvss3d8gegbqctf3ub.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.prouner",
+            "certificate_hash": "32d049273a66c1904361321e81476d8f16488fad"
+          }
+        },
+        {
+          "client_id": "827446492231-u64957alhf490f8dp0ssdavs6dao21mu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUUwKDhbkhiWYSPquFfSIqYMn5hr_PqdU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "827446492231-u64957alhf490f8dp0ssdavs6dao21mu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
