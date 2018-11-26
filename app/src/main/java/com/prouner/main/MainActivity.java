@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements MainMVP.View {
 
     //UI Elements
     private ProgressBar mLoadingProgressBar;
-    private Button mPlayButton;
+    private ImageButton mPlayButton;
     private Button mOptionButton1;
     private Button mOptionButton2;
     private Button mOptionButton3;
