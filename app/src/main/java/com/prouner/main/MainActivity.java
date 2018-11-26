@@ -1,6 +1,7 @@
 package com.prouner.main;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -85,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements MainMVP.View {
                     //Makes the "Play button" able to be hitted again, and sets a new text for it like "Replay"
                     mp.release();
                     togglePlayButton();
-                    mPlayButton.setText(R.string.play_again);
+//                    mPlayButton.setText(R.string.play_again);
                 }
             });
 
@@ -107,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements MainMVP.View {
 
     @Override
     public void updateUIForNewTest() {
-        mPlayButton.setText(R.string.play_test);
+//        mPlayButton.setText(R.string.play_test);
         mOptionButton1.setVisibility(View.GONE);
         mOptionButton2.setVisibility(View.GONE);
         mOptionButton3.setVisibility(View.GONE);
@@ -175,6 +177,7 @@ public class MainActivity extends AppCompatActivity implements MainMVP.View {
         mOptionButton2 = findViewById(R.id.bt_option_2);
         mOptionButton3 = findViewById(R.id.bt_option_3);
         mOptionButton4 = findViewById(R.id.bt_option_4);
+
 
 
 

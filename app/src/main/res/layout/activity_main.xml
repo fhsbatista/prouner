@@ -11,7 +11,9 @@
         android:id="@+id/bt_play"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="Play button"
         android:text="@string/play_test"
+        style="@style/ProunerStyleButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -19,6 +21,7 @@
 
     <Button
         android:id="@+id/bt_option_1"
+        style="@style/ProunerStyleButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -32,6 +35,7 @@
 
     <Button
         android:id="@+id/bt_option_2"
+        style="@style/ProunerStyleButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Button"
@@ -43,6 +47,7 @@
 
     <Button
         android:id="@+id/bt_option_3"
+        style="@style/ProunerStyleButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Button"
@@ -54,6 +59,7 @@
 
     <Button
         android:id="@+id/bt_option_4"
+        style="@style/ProunerStyleButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Button"
