@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/oval_shape_play_button"
+        android:background="@drawable/ripple_btn_play"
         android:contentDescription="Play button"
         android:src="@drawable/ic_play_arrow_black_24dp"
         android:text="@string/play_test"
