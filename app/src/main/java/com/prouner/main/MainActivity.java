@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements MainMVP.View {
 
     @Override
     public void playSound(byte[] audio) {
-        //Makes the "play button" unable so that the user has to wait for the sound gets finished to hit the button again
+        //Makes the "play btn_shape_round" unable so that the user has to wait for the sound gets finished to hit the btn_shape_round again
         togglePlayButton();
         //Executes the sound received
         MediaPlayer mp = new MediaPlayer();
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements MainMVP.View {
             mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                    //Makes the "Play button" able to be hitted again, and sets a new text for it like "Replay"
+                    //Makes the "Play btn_shape_round" able to be hitted again, and sets a new text for it like "Replay"
                     mp.release();
                     togglePlayButton();
 //                    mPlayButton.setText(R.string.play_again);
@@ -189,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements MainMVP.View {
         });
     }
 
-    //Enables the play button if it is unable and unables it if it is unable
+    //Enables the play btn_shape_round if it is unable and unables it if it is unable
     private void togglePlayButton() {
         if (mPlayButton.isEnabled()) {
             mPlayButton.setEnabled(false);

@@ -67,7 +67,7 @@ public interface MainMVP {
         void setView(View view);
 
         /**
-         * Notifies the Presenter that the user pressed the button to play the question's sound.
+         * Notifies the Presenter that the user pressed the btn_shape_round to play the question's sound.
          */
         void viewOnPlayButtonClicked();
 

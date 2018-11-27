@@ -6,12 +6,19 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:colorControlHighlight">@color/colorAccent</item>
     </style>
 
-    <style name="ProunerStyleButton" parent="@style/Widget.AppCompat.Button">
-        <item name="android:backgroundTint">@android:color/white</item>
-        <item name="android:textColor">@color/colorAccent</item>
-        <item name="android:elevation">16dp</item>
+
+    <style name="ProunerButton" parent="android:style/Theme.NoTitleBar">
+        <item name="android:background">@drawable/ripple_btn_option</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginBottom">4dp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:shadowColor">#FF000000</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">-1</item>
+        <item name="android:shadowRadius">0.2</item>
     </style>
 
 </resources>
