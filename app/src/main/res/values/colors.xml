@@ -3,6 +3,6 @@
     <color name="ic_launcher_background">#002171</color>
     <color name="colorPrimary">#0d47a1</color>
     <color name="colorPrimaryDark">#002171</color>
-    <color name="colorAccent">#82f7ff</color>
+    <color name="colorAccent">#002171</color>
     <color name="buttonText">#565656</color>
 </resources>
