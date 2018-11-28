@@ -1,6 +1,8 @@
 package com.prouner.util;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -33,5 +35,23 @@ public class Util {
             e.printStackTrace();
             return null;
         }
+    }
+
+    /**
+     *Checks if the device is currently connected to a network (it can be a internet connection or local connection).
+     * @param context Necessary to the method be able to access the Devices's Network data.
+     * @return true if there is a network connection, otherwise returns false.
+     */
+    public static boolean isConnectedToNetwork(Context context){
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        boolean isConnected = false;
+
+        if (connectivityManager != null) {
+            NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+            isConnected = (activeNetwork != null) && (activeNetwork.isConnectedOrConnecting());
+        }
+
+        return isConnected;
     }
 }
