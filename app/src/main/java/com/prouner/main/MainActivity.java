@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements MainMVP.View {
 
     //Constants
     public static final String TAG = MainActivity.class.getSimpleName();
-    public static final int PLAYING_SOUND_DELAY = 3000;
+    public static final int PLAYING_SOUND_DELAY = 1500;
 
 
     //UI Elements
