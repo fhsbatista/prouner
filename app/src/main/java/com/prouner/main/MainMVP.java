@@ -3,6 +3,7 @@ package com.prouner.main;
 import android.content.Context;
 
 import com.prouner.model.Question;
+import com.prouner.util.ConnectivityInfoReceiver;
 
 public interface MainMVP {
 
@@ -33,6 +34,12 @@ public interface MainMVP {
         void showCorrectOptionMessage();
 
         /**
+         * Can be used to handle a notification from the presenter,
+         * which means that the user has informed an incorrect answer.
+         */
+        void showIncorrectOptionMessage();
+
+        /**
          * This method can be used to handle some error that may
          * happen when the data is being downloaded, so that some
          * error message can be shown for the user.
@@ -56,6 +63,18 @@ public interface MainMVP {
          */
         void hideLoadingContent();
 
+        /**
+         * This is method is provided so that the view can be able to update the UI in order to show
+         * a message warning the user that there is no internet connection.
+         */
+        void showNoNetworkConnectionMessage();
+
+        /**
+         * This method is provided so that the view can be able to update the UI in order to <b>hide</b>
+         * a message warning the user that there is no internet connection.
+         */
+        void hideNoNetWorkConnectionMessage();
+
 
     }
 
@@ -65,6 +84,16 @@ public interface MainMVP {
          * @param view View which is implementing the MainMVP.View interface.
          */
         void setView(View view);
+
+        /**
+         * his method notifies the presenter that the device got a network connection.
+         * @param context Original context from the view, this context was sent by presenter when
+         *                the broadcast receiver was registered. It is necessary to unregister it.
+         * @param receiver BroadcastReceiver's instance, necessary to be unregistered.
+         */
+        void onNetworkConnectionRestored(Context context, ConnectivityInfoReceiver receiver);
+
+
 
         /**
          * Notifies the Presenter that the user pressed the btn_shape_round to play the question's sound.

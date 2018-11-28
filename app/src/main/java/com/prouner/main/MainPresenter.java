@@ -1,8 +1,13 @@
 package com.prouner.main;
 
+import android.content.Context;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.util.Log;
 
 import com.prouner.model.Question;
+import com.prouner.util.ConnectivityInfoReceiver;
+import com.prouner.util.Util;
 
 import java.util.List;
 
@@ -38,10 +43,7 @@ public class MainPresenter implements MainMVP.Presenter {
     @Override
     public void setView(MainMVP.View view) {
         mView = view;
-        mView.updateUIForNewTest();
-        isTestRunning = false;
-
-        requestQuestionList();
+        prepareQuestions();
     }
 
     @Override
@@ -68,7 +70,16 @@ public class MainPresenter implements MainMVP.Presenter {
                 requestQuestionList();
             }
             startNewTest();
+        } else{
+            mView.showIncorrectOptionMessage();
         }
+    }
+
+    @Override
+    public void onNetworkConnectionRestored(Context context, ConnectivityInfoReceiver receiver) {
+        mView.hideNoNetWorkConnectionMessage();
+        prepareQuestions();
+        context.unregisterReceiver(receiver);
     }
 
     /**
@@ -78,21 +89,29 @@ public class MainPresenter implements MainMVP.Presenter {
      * <p>Also requests the model to download the questions, and implements a callback and attaches it in the Model in order to be notified when the data get downloaded.
      */
     private void requestQuestionList() {
-        mView.showLoadingContent();
-        mModel.setOnQuestionRequestListener(new MainModel.OnQuestionRequestListener() {
-            @Override
-            public void onSuccess(List<Question> questionsList) {
-                mQuestionList = questionsList;
-                mView.hideLoadingContent();
-            }
+        if(Util.isConnectedToNetwork(mView.getContext())){
+            mView.showLoadingContent();
+            mModel.setOnQuestionRequestListener(new MainModel.OnQuestionRequestListener() {
+                @Override
+                public void onSuccess(List<Question> questionsList) {
+                    mQuestionList = questionsList;
+                    mView.hideLoadingContent();
+                }
 
-            @Override
-            public void onError() {
-                Log.d(TAG, "Error when downloading questions");
-                mView.showErrorWhenDownloadingQuestionsMessage();
-            }
-        });
-        mModel.getQuestionAttributesArray();
+                @Override
+                public void onError() {
+                    Log.d(TAG, "Error when downloading questions");
+                    mView.showErrorWhenDownloadingQuestionsMessage();
+                }
+            });
+            mModel.getQuestionAttributesArray();
+        } else{
+            mView.showNoNetworkConnectionMessage();
+            Context context = mView.getContext();
+            context.registerReceiver(new ConnectivityInfoReceiver(this, context),
+                    new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        }
+
     }
 
     /**
@@ -112,5 +131,15 @@ public class MainPresenter implements MainMVP.Presenter {
      */
     private boolean isOptionClickedCorrect(String userAnswer) {
         return mQuestionList.get(0).isAnswerCorrect(userAnswer);
+    }
+
+    /**
+     * This method notifies the view to update its UI for a new tests rounds.
+     * And also request a new set of questions for the tests.
+     */
+    private void prepareQuestions() {
+        mView.updateUIForNewTest();
+        isTestRunning = false;
+        requestQuestionList();
     }
 }

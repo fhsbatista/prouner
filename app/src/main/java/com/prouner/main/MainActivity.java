@@ -1,6 +1,7 @@
 package com.prouner.main;
 
 import android.content.Context;
+import android.graphics.Outline;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Handler;
@@ -10,7 +11,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
@@ -28,6 +31,8 @@ public class MainActivity extends AppCompatActivity implements MainMVP.View {
 
     private MainMVP.Presenter mPresenter;
 
+
+
     //Constants
     public static final String TAG = MainActivity.class.getSimpleName();
     public static final int PLAYING_SOUND_DELAY = 3000;
@@ -40,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements MainMVP.View {
     private Button mOptionButton2;
     private Button mOptionButton3;
     private Button mOptionButton4;
+    private ImageView mImageViewNoNetwork;
+    private TextView mTextViewNoNetwork;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +116,6 @@ public class MainActivity extends AppCompatActivity implements MainMVP.View {
 
     @Override
     public void updateUIForNewTest() {
-//        mPlayButton.setText(R.string.play_test);
         mOptionButton1.setVisibility(View.GONE);
         mOptionButton2.setVisibility(View.GONE);
         mOptionButton3.setVisibility(View.GONE);
@@ -147,7 +153,12 @@ public class MainActivity extends AppCompatActivity implements MainMVP.View {
 
     @Override
     public void showCorrectOptionMessage() {
-        Toast.makeText(this, "CorrectAnswer", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Correct Answer", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showIncorrectOptionMessage() {
+        Toast.makeText(this, "Wrong Answer!", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -167,6 +178,24 @@ public class MainActivity extends AppCompatActivity implements MainMVP.View {
         Toast.makeText(this, "Problems when downloading the questions", Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void showNoNetworkConnectionMessage() {
+        mTextViewNoNetwork.setVisibility(View.VISIBLE);
+        mImageViewNoNetwork.setVisibility(View.VISIBLE);
+        mLoadingProgressBar.setVisibility(View.GONE);
+        mPlayButton.setVisibility(View.GONE);
+        mOptionButton1.setVisibility(View.GONE);
+        mOptionButton2.setVisibility(View.GONE);
+        mOptionButton3.setVisibility(View.GONE);
+        mOptionButton4.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void hideNoNetWorkConnectionMessage() {
+        mTextViewNoNetwork.setVisibility(View.GONE);
+        mImageViewNoNetwork.setVisibility(View.GONE);
+    }
+
     //Bind the UI elements
     private void bindUI() {
 
@@ -177,6 +206,8 @@ public class MainActivity extends AppCompatActivity implements MainMVP.View {
         mOptionButton2 = findViewById(R.id.bt_option_2);
         mOptionButton3 = findViewById(R.id.bt_option_3);
         mOptionButton4 = findViewById(R.id.bt_option_4);
+        mImageViewNoNetwork = findViewById(R.id.iv_nonetwork);
+        mTextViewNoNetwork = findViewById(R.id.tv_nonetwork);
 
 
 

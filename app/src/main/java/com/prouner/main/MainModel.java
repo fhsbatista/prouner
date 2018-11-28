@@ -31,7 +31,6 @@ public class MainModel implements MainMVP.Model {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         ref = ref.child("questions").child("sentences");
 
-
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
