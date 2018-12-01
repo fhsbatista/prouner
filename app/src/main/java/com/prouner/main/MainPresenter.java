@@ -9,6 +9,7 @@ import com.prouner.model.Question;
 import com.prouner.util.ConnectivityInfoReceiver;
 import com.prouner.util.Util;
 
+import java.util.Collections;
 import java.util.List;
 
 public class MainPresenter implements MainMVP.Presenter {
@@ -68,6 +69,8 @@ public class MainPresenter implements MainMVP.Presenter {
             mQuestionList.remove(0);
             if(mQuestionList.size() == 0) {
                 requestQuestionList();
+            } else{
+                Collections.shuffle(mQuestionList);
             }
             startNewTest();
         } else{

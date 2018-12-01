@@ -50,7 +50,6 @@ public class MainModel implements MainMVP.Model {
                         public void onSuccess(byte[] bytes) {
                             Question question = new Question(bytes, options);
                             questionList.add(question);
-                            Collections.shuffle(questionList);
                             if (onQuestionRequestListener != null) {
                                 onQuestionRequestListener.onSuccess(questionList);
                             }
