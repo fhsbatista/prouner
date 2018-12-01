@@ -222,15 +222,6 @@ public class MainActivity extends AppCompatActivity implements MainMVP.View {
         });
     }
 
-    //Enables the play btn_shape_round if it is unable and unables it if it is unable
-    private void togglePlayButton() {
-        if (mPlayButton.isEnabled()) {
-            mPlayButton.setEnabled(false);
-        } else {
-            mPlayButton.setEnabled(true);
-        }
-    }
-
 
     @Override
     protected void onStop() {
