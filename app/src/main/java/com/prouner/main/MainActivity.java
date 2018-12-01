@@ -30,6 +30,7 @@ import java.io.IOException;
 public class MainActivity extends AppCompatActivity implements MainMVP.View {
 
     private MainMVP.Presenter mPresenter;
+    private MediaPlayer mMediaPlayer = new MediaPlayer();
 
 
 
@@ -68,14 +69,16 @@ public class MainActivity extends AppCompatActivity implements MainMVP.View {
 
     @Override
     public void playSound(byte[] audio) {
-        //Makes the "play btn_shape_round" unable so that the user has to wait for the sound gets finished to hit the btn_shape_round again
-        togglePlayButton();
-        //Executes the sound received
-        MediaPlayer mp = new MediaPlayer();
+        //Checks if the an audio is being played, if so, the media player is reseted so it can play the
+        //the audio from its beginning
+        if(mMediaPlayer.isPlaying()){
+            mMediaPlayer.stop();
+            mMediaPlayer.reset();
+        }
         try {
-            mp.setDataSource(Util.getFileFromByteArray(audio, this).getFD());
-            mp.prepare();
-            mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            mMediaPlayer.setDataSource(Util.getFileFromByteArray(audio, this).getFD());
+            mMediaPlayer.prepare();
+            mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mediaPlayer) {
                     mediaPlayer.start();
@@ -88,17 +91,16 @@ public class MainActivity extends AppCompatActivity implements MainMVP.View {
                     }, PLAYING_SOUND_DELAY);
                 }
             });
-            mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                    //Makes the "Play btn_shape_round" able to be hitted again, and sets a new text for it like "Replay"
-                    mp.release();
-                    togglePlayButton();
-//                    mPlayButton.setText(R.string.play_again);
+                    //Reset the mediaplayer object so that it can receive a new datasource when the
+                    //play button get hitted again
+                    mMediaPlayer.reset();
                 }
             });
 
-            mp.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            mMediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
                 @Override
                 public boolean onError(MediaPlayer mp, int what, int extra) {
                     Log.d(TAG , "Media Player : onErrorListener - " + "Error when playing the sound");
@@ -229,4 +231,11 @@ public class MainActivity extends AppCompatActivity implements MainMVP.View {
         }
     }
 
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mMediaPlayer.release();
+
+    }
 }
